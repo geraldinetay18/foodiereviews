@@ -1,0 +1,15 @@
+<!--Inherit master page-->
+{% extends 'reviewapp/base.html' %}
+
+{% block content %}
+
+<!--Insert your page's content within the blocks!-->
+    <h2>A Test page to display User's Details</h2>
+    {{user.username}}
+    {{user.email}}
+    {{user.last_login}}
+    {{user.date_joined}}
+    {{user.is_staff}}
+    {{user.is_active}}
+
+{% endblock %}
