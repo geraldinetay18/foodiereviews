@@ -1,0 +1,35 @@
+<!--Inherit master page-->
+{% extends 'reviewapp/base.html' %}
+
+{% block content %}
+
+<!--Insert your page's content within the blocks!-->
+<h2>Add Review</h2>
+<h4>{{restaurant.restaurant_text}}</h4>
+<h6>@ {{restaurant.restaurant_address}}</h6>
+<br/>
+
+<h6>Rating: </h6>
+<input type="radio" name="gender" value="1"> 1
+<input type="radio" name="gender" value="2"> 2
+<input type="radio" name="gender" value="3"> 3
+<input type="radio" name="gender" value="4"> 4
+<input type="radio" name="gender" value="5"> 5
+<br/><br/>
+
+<h6>Price: </h6>
+<input type="radio" name="gender" value="1"> $
+<input type="radio" name="gender" value="2"> $$
+<input type="radio" name="gender" value="3"> $$$
+<br/><br/>
+
+<h6>Review:</h6>
+<h7>{{user.username}} says...</h7>
+<form action="/action_page.php">
+    <!-- Description <input type="text" name="description"><br> -->
+    <textarea rows="5" cols="60" name="description" placeholder="Enter review here">
+         </textarea><br>
+    <input type="submit" value="Submit" class="btn btn-success">
+</form>
+
+{% endblock %}

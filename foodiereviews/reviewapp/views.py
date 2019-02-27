@@ -1,9 +1,11 @@
 from django.http import HttpResponse, Http404, HttpResponseRedirect #no use if have render
-from .models import Review
+from .models import *
 from django.template import loader #no use it for #4
 from django.shortcuts import render, get_object_or_404 #replace the 2 imported http above, this is #4
 from django.urls import reverse
 from django.views import generic
+from django.contrib.auth.decorators import login_required
+from django.contrib.auth import authenticate, login, logout
 
 
 def categories(request):
@@ -15,12 +17,17 @@ def restaurants(request, category_id):
 def details(request, restaurant_id):
     return HttpResponse("You're looking at the details of restaurant %s." % restaurant_id)
 
+#SAMPLE
+@login_required
 def add(request, restaurant_id):
-    return HttpResponse("You're adding a review for restaurant %s." % restaurant_id)
+    restaurant = get_object_or_404(Restaurant, pk=restaurant_id)
+    return render(request, 'reviewapp/add.html', {'restaurant': restaurant, 'user': request.user})
 
-def login(request):
-    return HttpResponse("You're at the login page.")
-
+def test(request):
+    if request.user.is_authenticated:
+        return render(request, 'reviewapp/test.html', {'user': request.user})
+    else:
+        return render(request, 'reviewapp/test.html')
 
 
 #INDEX
