@@ -4,6 +4,7 @@ from . import views
 
 app_name = 'reviewapp'
 urlpatterns = [
+
     # ex: /reviewapp/
     path('', views.categories, name='categories'),
 
@@ -15,4 +16,7 @@ urlpatterns = [
 
     # ex: /reviewapp/resto/5/add
     path('resto/<int:restaurant_id>/add', views.add, name='add'),
+
+    # ex: /reviewapp/login
+    path('login', views.login, name='login'),
 ]
