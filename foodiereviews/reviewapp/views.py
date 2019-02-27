@@ -1,9 +1,24 @@
 from django.http import HttpResponse, Http404, HttpResponseRedirect #no use if have render
-from .models import Question,Choice
+# from .models import Question,Choice
 from django.template import loader #no use it for #4
 from django.shortcuts import render, get_object_or_404 #replace the 2 imported http above, this is #4
 from django.urls import reverse
 from django.views import generic
+
+
+def categories(request):
+    return HttpResponse("You're looking at all the categories.")
+
+def restaurants(request, category_id):
+    return HttpResponse("You're looking at the restaurant list of category %s." % category_id)
+
+def details(request, restaurant_id):
+    return HttpResponse("You're looking at the details of restaurant %s." % restaurant_id)
+
+def add(request, restaurant_id):
+    return HttpResponse("You're adding a review for restaurant %s." % restaurant_id)
+
+
 
 #INDEX
 '''
@@ -21,6 +36,7 @@ def index(request):
         'latest_question_list': latest_question_list,
     }
     return HttpResponse(template.render(context,request))
+    
     # 4 - same as above #3 but use shortcut: render() --> removed template
     latest_question_list = Question.objects.order_by('-pub_date')[:5]
     context = {
@@ -28,12 +44,13 @@ def index(request):
     }
     return render(request,'polls/index.html',context)
 '''
+'''
 class IndexView(generic.ListView):
     template_name='polls/index.html'
     context_object_name='latest_question_list'
     def get_queryset(self):
         return Question.objects.order_by('-pub_date')[:5]
-
+'''
 
 
 #DETAIL
@@ -50,10 +67,11 @@ def detail(request,question_id):
     question = get_object_or_404(Question,pk=question_id)
     return render(request,'polls/detail.html',{'question':question})
 '''
+'''
 class DetailView(generic.DetailView):
     model=Question
     template_name='polls/detail.html'
-
+'''
 
     
 #RESULT
@@ -67,13 +85,14 @@ def results(request,question_id):
     question=get_object_or_404(Question,pk=question_id)
     return render(request,'polls/result.html',{'question':question})
 '''
+'''
 class ResultView(generic.DetailView):
     model=Question
     template_name='polls/result.html'
 
+'''
 
-
-
+'''
 def vote (request, question_id):
     # 1 return HttpResponse("You're voting on question %s." %question_id)
     # 3
@@ -89,3 +108,4 @@ def vote (request, question_id):
         selected_choice.votes+=1
         selected_choice.save()
         return HttpResponseRedirect(reverse('polls:results',args=(question.id,)))
+'''
