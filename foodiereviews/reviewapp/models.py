@@ -19,9 +19,11 @@ class Restaurant(models.Model):
         return self.review_set.count()
     def rating(self):
         amount = self.review_amount()
+        if amount==0:
+            return 0
         total_rating =0
-        for review in self.review_set.all:
-            total_rating+=review.rating
+        for review in self.review_set.all():
+            total_rating+=review.review_rate
         return total_rating/amount
 
 class Review(models.Model):
