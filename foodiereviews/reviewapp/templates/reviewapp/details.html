@@ -1,0 +1,67 @@
+<!--Inherit master page-->
+{% extends 'reviewapp/base.html' %}
+
+{% block content %}
+
+<!--Insert your page's content within the blocks!-->
+<h2>{{restaurant.restaurant_text}}</h2>
+<div>
+    <p>Address {{restaurant.restaurant_address}}</p>
+    <p>Rating {{restaurant.rating}}</p>
+
+
+</div>
+<div>
+    <p>Reviews: </p>
+    {% for review in restaurant.review_set.all %}
+        <div class="card card-body" style="margin: 10px">
+            <div >
+                <strong>{{review.review_user}}</strong>
+                {{review.review_description}} 
+                
+                <div>
+                    <span style="padding-left: 10px">
+                            {{review.review_likes}}
+                            <i class="glyphicon glyphicon-euro"></i>
+                    </span>
+                    <a href="#">Like</a>
+                    <a href="#">Comment</a>
+                </div>
+            </div>
+            <div>
+                <ul>
+                    {% for comment in review.comment_set.all %}
+                        <li>
+                            <strong>{{comment.comment_user}}</strong>
+                            {{comment.comment_description}}
+                            <a href="#">Reply</a>
+                            <ul>
+                                {% for reply in comment.reply_set.all %}
+                                    <li>
+                                        <strong>{{reply.reply_user}}</strong>
+                                        {{reply.reply_description}}
+                                    </li>
+                                {% endfor %}
+                                <div class="input-group mb-3">
+                                    <input type="text" class="form-control" name="reply" placeholder="Add your reply"> 
+                                    <div class="input-group-append">
+                                        <input type="submit" value="Reply" class="btn btn-outline-secondary">
+                                    </div>
+                                </div>
+                            </ul>
+                        </li>
+                    {% endfor %}
+                    <div class="input-group mb-3">
+                        <input type="text" class="form-control" name="comment" placeholder="Add your comment"> 
+                        <div class="input-group-append">
+                            <input type="submit" value="Comment" class="btn btn-success">
+                        </div>
+                    </div>
+                </ul>
+            </div>
+        </div>
+    {% endfor %}
+</div>
+
+
+{% endblock %}

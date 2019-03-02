@@ -14,8 +14,10 @@ def categories(request):
 def restaurants(request, category_id):
     return HttpResponse("You're looking at the restaurant list of category %s." % category_id)
 
+'''
 def details(request, restaurant_id):
     return HttpResponse("You're looking at the details of restaurant %s." % restaurant_id)
+'''
 
 #SAMPLE
 @login_required
@@ -28,6 +30,11 @@ def test(request):
         return render(request, 'reviewapp/test.html', {'user': request.user})
     else:
         return render(request, 'reviewapp/test.html')
+
+@login_required
+def details(request, restaurant_id):
+    restaurant = get_object_or_404(Restaurant, pk=restaurant_id)
+    return render(request, 'reviewapp/details.html', {'restaurant': restaurant, 'user': request.user})
 
 
 #INDEX
