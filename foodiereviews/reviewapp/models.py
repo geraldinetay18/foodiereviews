@@ -29,9 +29,12 @@ class Restaurant(models.Model):
 class Review(models.Model):
     restaurant = models.ForeignKey(Restaurant,on_delete=models.CASCADE)
     review_user = models.ForeignKey(User, on_delete=models.CASCADE)
+    review_title = models.CharField(max_length=100)
     review_description = models.CharField(max_length=500)
     review_rate = models.IntegerField(default = 0)
+    review_price = models.IntegerField(default = 0)
     review_likes = models.IntegerField(default = 0)
+    review_date = models.DateTimeField(auto_now_add=True)
 
     def __str__(self):
         return self.review_description
