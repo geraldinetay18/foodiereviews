@@ -1,7 +1,40 @@
-<!-- templates/registration/login.html -->
-<h2>Login</h2>
-<form method="post">
-  {% csrf_token %}
-  {{ form.as_p }}
-  <button type="submit">Login</button>
-</form>
+{% extends 'reviewapp/base.html' %}
+{% load widget_tweaks %}
+
+{% block content %}
+
+<!--CSS-->
+{% load static %} 
+<link rel="stylesheet" type="text/css" href="{% static 'reviewapp/login.css' %}">
+
+  <div class=box>
+
+    <h2>Foodie Reviews</h2>
+
+    <form method="post">
+      {% csrf_token %}
+
+      <div class="inputBox">
+          {% render_field form.username %}
+          <label>Username</label>
+        </div>
+
+      <div class="inputBox">
+          {% render_field form.password %}
+          <label>Password</label>
+        </div>
+      <br>
+
+      <button type="submit" id="submit">Ready!</button>
+    </form>
+  </div>
+
+  <div>
+      {% for error in form.non_field_errors %}
+      <div class="alert alert-danger">
+          <strong>{{ error|escape }}</strong>
+      </div>
+  {% endfor %}
+  </div>
+
+  {% endblock %}

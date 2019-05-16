@@ -1,35 +1,86 @@
-<!--Inherit master page-->
 {% extends 'reviewapp/base.html' %}
-
+{% load widget_tweaks %}
 {% block content %}
 
-<!--Insert your page's content within the blocks!-->
-<h2>Add Review</h2>
-<h4>{{restaurant.restaurant_text}}</h4>
-<h6>@ {{restaurant.restaurant_address}}</h6>
-<br/>
+<!--CSS-->
+{% load static %}
+<link rel="stylesheet" type="text/css" href="{% static 'reviewapp/addreview.css' %}">
 
-<h6>Rating: </h6>
-<input type="radio" name="gender" value="1"> 1
-<input type="radio" name="gender" value="2"> 2
-<input type="radio" name="gender" value="3"> 3
-<input type="radio" name="gender" value="4"> 4
-<input type="radio" name="gender" value="5"> 5
-<br/><br/>
+<style>
+  
+</style>
+<div id="outer"
+    style="width:100%; background:url('/static/reviewapp/images/{{ restaurant.pk }}.jpg') no-repeat fixed center; background-size: cover;">
+    <div id="wrapper">
+        <div>
+            <h3>{{restaurant.restaurant_text}}</h3>
+            <h6><i class="fas fa-map-marker-alt" style="color:cornflowerblue;"></i> {{restaurant.restaurant_address}}
+            </h6>
+        </div>
+        <br>
 
-<h6>Price: </h6>
-<input type="radio" name="gender" value="1"> $
-<input type="radio" name="gender" value="2"> $$
-<input type="radio" name="gender" value="3"> $$$
-<br/><br/>
+        <h5>Your first hand experiences would really help other foodies. Thank you!</h5>
+        <hr>
 
-<h6>Review:</h6>
-<h7>{{user.username}} says...</h7>
-<form action="/action_page.php">
-    <!-- Description <input type="text" name="description"><br> -->
-    <textarea rows="5" cols="60" name="description" placeholder="Enter review here">
-         </textarea><br>
-    <input type="submit" value="Submit" class="btn btn-success">
-</form>
+        <form action="{% url 'reviewapp:reviewed' restaurant.pk %}" method="post">
+            {% csrf_token %}
 
+            <div>
+                <h6>Your overall rating of the restaurant</h6>
+                <label class="rate">
+                    <input type="radio" name="rate" value="1" checked>
+                    <i class=" fas fa-star text-warning" /></i>
+                </label>
+                <label class="rate">
+                    <input type="radio" name="rate" value="2">
+                    <i class=" fas fa-star text-warning" /></i>
+                </label>
+                <label class="rate">
+                    <input type="radio" name="rate" value="3">
+                    <i class=" fas fa-star text-warning" /></i>
+                </label>
+                <label class="rate">
+                    <input type="radio" name="rate" value="4">
+                    <i class=" fas fa-star text-warning" /></i>
+                </label>
+                <label class="rate">
+                    <input type="radio" name="rate" value="5">
+                    <i class=" fas fa-star text-warning" /></i>
+                </label>
+            </div>
+            <br>
+
+            <div>
+                <h6>How expensive is this restaurant?</h6>
+                <label>
+                    <input type="radio" name="price" value="1" checked>
+                    <div class="price"><i class="fas fa-dollar-sign"></i></div>
+                </label>
+                <label>
+                    <input type="radio" name="price" value="2">
+                    <div class="price"><i class="fas fa-dollar-sign"></i><i class="fas fa-dollar-sign"></i></div>
+                </label>
+                <label>
+                    <input type="radio" name="price" value="3">
+                    <div class="price"><i class="fas fa-dollar-sign"></i><i class="fas fa-dollar-sign"></i><i class="fas fa-dollar-sign"></i></div>
+                </label>
+                <br><br>
+            </div>
+
+            <div class="fieldWrapper">
+                <h6>Title of your review</h6>
+                {% render_field form.review_title class="form-control" placeholder="Summarize your visit or highlight an interesting detail" %}
+            </div><br>
+            <div class="fieldWrapper">
+                <h6>Your review</h6>
+                {% render_field form.review_description class="form-control" placeholder="Tell people about the food, atmosphere, service, etc." %}
+            </div><br>
+
+            <input type="submit" value="Submit your review" class="btn btn-success"
+                style="font-weight: 500; margin-bottom: 50px">
+            <br>
+
+        </form>
+    </div>
+</div>
 {% endblock %}

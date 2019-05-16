@@ -5,6 +5,7 @@
     <!-- Required meta tags -->
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <title>Foodie Reviews</title>
 
     <!--CSS-->
     {% load static %}
@@ -13,8 +14,9 @@
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css">
     <!--Font-->
     <link href='http://fonts.googleapis.com/css?family=Lato:400,700' rel='stylesheet' type='text/css'>
-
-    <title>{% block title %}Foodie Reviews{% endblock %}</title>
+    <!--Font Awesome Icons-->
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.7.2/css/all.css"
+        integrity="sha384-fnmOCqbTlWIlj8LyTjo7mOUStjsKC4pOpQbqyi7RrhN7udi9RwhKkMHpvLbHG9Sr" crossorigin="anonymous">
 </head>
 
 <body>
@@ -28,39 +30,42 @@
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"
         integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM"
         crossorigin="anonymous"></script>
+    {% load widget_tweaks %}
 
     <main>
-
-
-        <nav class="navbar navbar-expand-lg navbar-light bg-light">
-            <a class="navbar-brand" href="#">
-                <img src="/static/reviewapp/images/fricon.png" width="40" height="40" alt="">
-                Foodie Reviews
+        <style>
+            body {
+                background-color: rgb(241, 241, 241)
+            }
+        </style>
+        <nav class="navbar navbar-expand-lg navbar-light" style="background-color:white;">
+            <a class="navbar-brand" href="/reviewapp/">
+                <img src="/static/reviewapp/images/frlogo3.png" height="40px" alt="foodie reviews">
             </a>
-
-            <!-- 
-            <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent"
-                aria-controls="navbarSupportedContent" aria-expanded="true" aria-label="Toggle navigation">
-                <span class="navbar-toggler-icon"></span>
-            </button>
-            <div class="collapse navbar-collapse" id="navbarSupportedContent"> -->
 
             <ul class="nav navbar-nav mr-auto">
                 <li class="nav-item"><a class="nav-link" href="{% url 'reviewapp:categories' %}">Home</a></li>
                 <li class="nav-item"><a class="nav-link" href="{% url 'reviewapp:restaurants' 1 %}">Restaurants</a></li>
-                <li><a href="/accounts/login">
-                        <button class="btn btn-outline-info my-2 my-sm-0">Login</button>
-                    </a></li>
-                <li><a href="/accounts/logout">
-                        <button class="btn btn-outline-info my-2 my-sm-0">Logout</button>
-                    </a></li>
-            </ul>
-            <form class="form-inline my-2 my-lg-0">
-                <input class="form-control mr-sm-2" type="search" placeholder="Search" aria-label="Search">
-                <button class="btn btn-outline-success my-2 my-sm-0" type="submit">Search</button>
-            </form>
-        </nav>
+                <li class="nav-item">
+                    <form action="{% url 'reviewapp:search' %}" method="get">
+                        <input class="form-control searchbar" type="text" placeholder="Search" aria-label="Search"
+                            name="q">
+                    </form>
+                </li>
 
+            </ul>
+
+            {% if user.is_authenticated %}
+            <span class="navbar-text" style="margin-right:20px">Hello, {{user.username}}!</span>
+            <a href="/accounts/logout"><button class="btn btn-info my-2 my-sm-0 login" style="font-weight: 500">Log
+                    out</button>
+            </a>
+            {% else %}
+            <a href="/accounts/login"><button class="btn btn-info my-2 my-sm-0 login" style="font-weight: 500">Log
+                    in</button>
+            </a>
+            {% endif %}
+        </nav>
         {% block content %}
         {% endblock %}
     </main>

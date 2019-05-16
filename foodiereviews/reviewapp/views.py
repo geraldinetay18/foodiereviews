@@ -1,7 +1,10 @@
-from django.http import HttpResponse, Http404, HttpResponseRedirect #no use if have render
+# no use if have render
+from django.http import HttpResponse, Http404, HttpResponseRedirect
 from .models import *
-from django.template import loader #no use it for #4
-from django.shortcuts import render, get_object_or_404 #replace the 2 imported http above, this is #4
+from .forms import *
+from django.template import loader  # no use it for #4
+# replace the 2 imported http above, this is #4
+from django.shortcuts import render, get_object_or_404
 from django.urls import reverse
 from django.views import generic
 from django.contrib.auth.decorators import login_required
@@ -9,21 +12,66 @@ from django.contrib.auth import authenticate, login, logout
 
 
 def categories(request):
-    return HttpResponse("You're looking at all the categories.")
+    return render(request, 'reviewapp/categories.html')
+    # return HttpResponse("You're looking at all the categories.")
+
 
 def restaurants(request, category_id):
     return HttpResponse("You're looking at the restaurant list of category %s." % category_id)
 
 '''
+
 def details(request, restaurant_id):
     return HttpResponse("You're looking at the details of restaurant %s." % restaurant_id)
 '''
 
-#SAMPLE
+# SAMPLE
 @login_required
 def add(request, restaurant_id):
+    form = ReviewForm()
     restaurant = get_object_or_404(Restaurant, pk=restaurant_id)
-    return render(request, 'reviewapp/add.html', {'restaurant': restaurant, 'user': request.user})
+    context = {
+        'restaurant': restaurant, 
+        'form': form
+    }
+    return render(request, 'reviewapp/add.html', context)
+
+
+def testform(request):
+    form = ReviewForm()
+    if request.method == "POST":
+        form = ReviewForm(request.POST)
+        if form.is_valid():
+            res3 = get_object_or_404(Restaurant, pk=3)
+            res3.review_set.create(
+                review_user=request.user, **form.cleaned_data, review_likes=0)
+        else:
+            print(form.errors)
+    context = {'form': form}
+    return render(request, 'reviewapp/testform.html', context)
+
+def reviewed(request, restaurant_id):
+    form = ReviewForm(request.POST)
+    if form.is_valid():
+        rtg = request.POST.get("rate", 1)
+        p = request.POST.get("price", 1)
+        res = get_object_or_404(Restaurant, pk=restaurant_id)
+        res.review_set.create(review_user=request.user, **form.cleaned_data, review_rate=rtg, review_price=p, review_likes=0)
+    else:
+        print(form.errors)
+
+    return render(request, 'reviewapp/reviewed.html', {'reviews': res.review_set.all()})
+
+    # rtg = request.POST.get("rate", 1)
+    # p = request.POST.get("price", 1)
+    # t = request.POST.get("title", "")
+    # d = request.POST.get("description", "")
+    # res = get_object_or_404(Restaurant, pk=restaurant_id)
+    # res.review_set.create(review_user=request.user, review_title=t,
+    #                       review_description=d, review_rate=rtg, review_price=p, review_likes=0)
+    # return HttpResponse("You're looking at the reviewed page of restaurant %s." % restaurant_id)
+    # return render(request, 'reviewapp/add.html', {'restaurant': restaurant, 'user': request.user})
+
 
 def test(request):
     if request.user.is_authenticated:
@@ -36,8 +84,12 @@ def details(request, restaurant_id):
     restaurant = get_object_or_404(Restaurant, pk=restaurant_id)
     return render(request, 'reviewapp/details.html', {'restaurant': restaurant, 'user': request.user})
 
+#same logic and html as views.restaurants, just diff 
+def search(request):
+    search_detail = request.GET.get('q')
+    return HttpResponse("You're looking at the restaurant list that match %s" % search_detail)
 
-#INDEX
+# INDEX
 '''
 def index(request):
     # 1 return HttpResponse("Hello saphira")
@@ -70,7 +122,7 @@ class IndexView(generic.ListView):
 '''
 
 
-#DETAIL
+# DETAIL
 '''
 def detail(request,question_id):
     # 1  return HttpResponse("You're looking at question %s." %question_id)
@@ -80,7 +132,7 @@ def detail(request,question_id):
     except Question.DoesNotExist:
         raise Http404("Question does not exist")
     return render(request,'polls/detail.html',{'question':question})
-    #4
+    # 4
     question = get_object_or_404(Question,pk=question_id)
     return render(request,'polls/detail.html',{'question':question})
 '''
@@ -90,15 +142,15 @@ class DetailView(generic.DetailView):
     template_name='polls/detail.html'
 '''
 
-    
-#RESULT
+
+# RESULT
 '''
 def results(request,question_id):
     # 1
     response="You're looking at the results of question %s."
     return HttpResponse(response %question_id)
 
-    #4
+    # 4
     question=get_object_or_404(Question,pk=question_id)
     return render(request,'polls/result.html',{'question':question})
 '''

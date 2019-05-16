@@ -1,0 +1,6 @@
+<h1>Reviews page. Success!</h1>
+<ul>
+    {% for rv in reviews %}
+    <li>{{rv.review_date}} >> {{rv.restaurant.restaurant_text}} >> {{rv.review_user.username}} says >> {{rv.review_rate}} STARS >> {{rv.review_likes}} LIKES>> PRICE: {{rv.review_price}} >> {{ rv.review_title }} - {{ rv.review_description }} </li>
+    {% endfor %}
+</ul>
