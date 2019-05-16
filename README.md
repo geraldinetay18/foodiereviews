@@ -10,9 +10,9 @@ A Django Web App built with the National University of Singapore, Institute of S
 - Browse restaurant by categories
 - Browse list of restaurants within the selected category
 - For each restaurant, view details, reviews and comments to the reviews 
-- Login for the following:
-- Add reviews to a resturant
-- Add comments to a review
+- Login as member for the following 2 additional features
+- Add reviews to a resturant (star rating, price rating, review title and description)
+- Add comments to a review (like button, replies are indented)
 
 ## Screenshots
 ![](foodiereviews/reviewapp/static/reviewapp/images/screenshot1.PNG)
