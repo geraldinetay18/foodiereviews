@@ -1,6 +1,4 @@
-# Django Food Reviews Web App
-The best food review app in Singapore, JB and some say Batam!
-
+# Food Reviews App
 A Django Web App built with the National University of Singapore, Institute of Systems Science. 
 
 ## Contributions
@@ -17,11 +15,11 @@ A Django Web App built with the National University of Singapore, Institute of S
 - Add comments to a review
 
 ## Screenshots
-![](reviewapp/static/reviewapp/images/screenshot1.PNG)
+![](foodiereviews/reviewapp/static/reviewapp/images/screenshot1.PNG)
 
-![](reviewapp/static/reviewapp/images/screenshot2.PNG)
+![](foodiereviews/reviewapp/static/reviewapp/images/screenshot1.PNG)
 
-![](reviewapp/static/reviewapp/images/screenshot3.PNG)
+![](foodiereviews/reviewapp/static/reviewapp/images/screenshot1.PNG)
 
 ## Running the project
 - Install python, django (and Anaconda prompt if running on Windows)
