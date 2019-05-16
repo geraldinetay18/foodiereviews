@@ -17,9 +17,9 @@ A Django Web App built with the National University of Singapore, Institute of S
 ## Screenshots
 ![](foodiereviews/reviewapp/static/reviewapp/images/screenshot1.PNG)
 
-![](foodiereviews/reviewapp/static/reviewapp/images/screenshot1.PNG)
+![](foodiereviews/reviewapp/static/reviewapp/images/screenshot2.PNG)
 
-![](foodiereviews/reviewapp/static/reviewapp/images/screenshot1.PNG)
+![](foodiereviews/reviewapp/static/reviewapp/images/screenshot3.PNG)
 
 ## Running the project
 - Install python, django (and Anaconda prompt if running on Windows)
