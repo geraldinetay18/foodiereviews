@@ -12,20 +12,40 @@ from django.contrib.auth import authenticate, login, logout
 
 
 def categories(request):
-    return render(request, 'reviewapp/categories.html')
-    # return HttpResponse("You're looking at all the categories.")
+    categories = Category.objects.all()
+    return render(request, 'reviewapp/categories.html', context={'categories': categories})
 
 
 def restaurants(request, category_id):
-    return HttpResponse("You're looking at the restaurant list of category %s." % category_id)
+    category = Category.objects.get(id=category_id)
+    restaurants = category.get_restaurants()
+    context = {
+        'category': category, 
+        'restaurants': restaurants
+    }
+    return render(request, 'reviewapp/restaurants.html', context)
 
-'''
 
-def details(request, restaurant_id):
-    return HttpResponse("You're looking at the details of restaurant %s." % restaurant_id)
-'''
+def comment(request, review_id):
+    review = get_object_or_404(Review, pk=review_id)
+    if review:
+        review.comment_set.create(comment_user=request.user, comment_description=request.POST.get('comment_description'))
+    else:
+        print("Invalid fields for comment. Required: review id, username and comment description.")
 
-# SAMPLE
+    return render(request, 'reviewapp/details.html', {'restaurant': review.restaurant, 'user': request.user})
+
+
+def reply(request, comment_id):
+    comment = get_object_or_404(Comment, pk=comment_id)
+    if comment:
+        comment.reply_set.create(reply_user=request.user, reply_description=request.POST.get('reply_description'))
+    else:
+        print("Invalid fields for reply. Required: comment id, username and reply description.")
+
+    return render(request, 'reviewapp/details.html', {'restaurant': comment.review.restaurant, 'user': request.user})
+
+
 @login_required
 def add(request, restaurant_id):
     form = ReviewForm()
@@ -36,19 +56,6 @@ def add(request, restaurant_id):
     }
     return render(request, 'reviewapp/add.html', context)
 
-
-def testform(request):
-    form = ReviewForm()
-    if request.method == "POST":
-        form = ReviewForm(request.POST)
-        if form.is_valid():
-            res3 = get_object_or_404(Restaurant, pk=3)
-            res3.review_set.create(
-                review_user=request.user, **form.cleaned_data, review_likes=0)
-        else:
-            print(form.errors)
-    context = {'form': form}
-    return render(request, 'reviewapp/testform.html', context)
 
 def reviewed(request, restaurant_id):
     form = ReviewForm(request.POST)

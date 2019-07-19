@@ -20,12 +20,18 @@ urlpatterns = [
     # ex: /reviewapp/resto/5/add
     path('resto/<int:restaurant_id>/add', views.add, name='add'),
 
+    # ex: /reviewapp/comment/6
+    path('comment/<int:review_id>/', views.comment, name='comment'),
+
+    # ex: /reviewapp/reply/6
+    path('reply/<int:comment_id>/', views.reply, name='reply'),
+
     # ex: /reviewapp/resto/5/reviewed
     path('resto/<int:restaurant_id>/reviewed', views.reviewed, name='reviewed'),
 
     # ex: /reviewapp/test
     path('test', views.test, name='test'),
 
-    # ex: /reviewapp/testform
-    path('testform', views.testform, name='testform')
+    
+
 ]

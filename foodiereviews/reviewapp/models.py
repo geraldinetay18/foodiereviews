@@ -5,6 +5,8 @@ from django.contrib.auth.models import User
 class Category(models.Model):
     category_text = models.CharField(max_length=50)
     
+    def get_restaurants(self):
+        return self.restaurant_set
     def __str__(self):
         return self.category_text
 

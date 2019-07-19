@@ -23,7 +23,5 @@ A Django Web App built with the National University of Singapore, Institute of S
 
 ## Running the project
 - Install python, django (and Anaconda prompt if running on Windows)
-- In Anaconda prompt, run django server using:
-```
-py manage.py runserver
-```
+- In Anaconda prompt, use `python manage.py migrate` once to create database tables, then run django server using `python manage.py runserver 0.0.0.0:8000`. The optional argument `0.0.0.0:8000` allows other computers to access your development server over the network.
+- Open browser and enter url `localhost:8000/reviewapp`

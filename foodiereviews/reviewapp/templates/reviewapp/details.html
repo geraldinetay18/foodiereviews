@@ -1,67 +1,90 @@
-<!--Inherit master page-->
 {% extends 'reviewapp/base.html' %}
 
 {% block content %}
 
-<!--Insert your page's content within the blocks!-->
-<h2>{{restaurant.restaurant_text}}</h2>
-<div>
-    <p>Address {{restaurant.restaurant_address}}</p>
-    <p>Rating {{restaurant.rating}}</p>
-
-
-</div>
-<div>
-    <p>Reviews: </p>
-    {% for review in restaurant.review_set.all %}
-        <div class="card card-body" style="margin: 10px">
-            <div >
-                <strong>{{review.review_user}}</strong>
-                {{review.review_description}} 
-                
-                <div>
-                    <span style="padding-left: 10px">
-                            {{review.review_likes}}
-                            <i class="glyphicon glyphicon-euro"></i>
-                    </span>
-                    <a href="#">Like</a>
-                    <a href="#">Comment</a>
-                </div>
+<style>
+.top-row{
+    margin-top: 30px;
+}
+li {
+    list-style: none;
+}
+</style>
+<div class="container">
+    <div class="row top-row">
+        <div class="col card border-0 shadow mb-4">
+            <div class="card-body">
+                <h1>{{restaurant.restaurant_text}}</h1>
+                <br>
+                <p>Address: <strong>{{restaurant.restaurant_address}}</strong></p>
+                <p>Rating: <strong>{{restaurant.rating}}</strong></p>
+                <a href="{% url 'reviewapp:add' restaurant.id %}" class="btn btn-primary">Add Review</a>
             </div>
-            <div>
-                <ul>
-                    {% for comment in review.comment_set.all %}
+        </div>        
+    </div>
+    <h3>Reviews</h3>
+    {% if restaurant.review_set.all %}
+        {% for review in restaurant.review_set.all %}
+            <div class="card card-body" style="margin: 10px">
+                <div>
+                    <h4>{{ review.review_title }}</h4>
+                    <strong>{{review.review_user}}</strong>
+                    {{review.review_description}} 
+                    <div>
+                        <a href="#">Like</a>
+                        <span style="padding-left: 10px">
+                            <span class="badge badge-danger">{{review.review_likes}} likes</span>
+                        </span>
+                    </div>
+                </div>
+                <hr>
+                <div>
+                    <ul>
                         <li>
-                            <strong>{{comment.comment_user}}</strong>
-                            {{comment.comment_description}}
-                            <a href="#">Reply</a>
-                            <ul>
-                                {% for reply in comment.reply_set.all %}
-                                    <li>
-                                        <strong>{{reply.reply_user}}</strong>
-                                        {{reply.reply_description}}
-                                    </li>
-                                {% endfor %}
+                            <form name="comment" action="{% url 'reviewapp:comment' review.id %}" method="post">
+                                {% csrf_token %}
                                 <div class="input-group mb-3">
-                                    <input type="text" class="form-control" name="reply" placeholder="Add your reply"> 
+                                    <input type="text" class="form-control" name="comment_description" placeholder="Write your comment about the review..."> 
                                     <div class="input-group-append">
-                                        <input type="submit" value="Reply" class="btn btn-outline-secondary">
+                                        <input type="submit" value="Comment" class="btn btn-success">
                                     </div>
                                 </div>
-                            </ul>
+                            </form>
                         </li>
-                    {% endfor %}
-                    <div class="input-group mb-3">
-                        <input type="text" class="form-control" name="comment" placeholder="Add your comment"> 
-                        <div class="input-group-append">
-                            <input type="submit" value="Comment" class="btn btn-success">
-                        </div>
-                    </div>
-                </ul>
-            </div>
-        </div>
-    {% endfor %}
-</div>
+                        {% for comment in review.comment_set.all %}
+                            <li>
+                                <strong>{{comment.comment_user}}</strong>
+                                {{comment.comment_description}}
+                                <ul>
+                                    {% for reply in comment.reply_set.all %}
+                                        <li>
+                                            <strong>{{reply.reply_user}}</strong>
+                                            {{reply.reply_description}}
+                                        </li>
+                                    {% endfor %}
 
+                                    <form name="reply" action="{% url 'reviewapp:reply' comment.id %}" method="post">
+                                        {% csrf_token %}
+                                        <div class="input-group mb-3">
+                                            <input type="text" class="form-control" name="reply_description" placeholder="Write your reply to the comment..."> 
+                                            <div class="input-group-append">
+                                                <input type="submit" value="Reply" class="btn btn-outline-secondary">
+                                            </div>
+                                        </div>
+                                    </form>
+                                </ul>
+                            </li>
+                        {% endfor %}
+                    </ul>
+                </div>
+            </div>
+        {% endfor %}
+
+    {% else %}
+        <div class="alert alert-success" role="alert">
+            <p>There are no reviews for {{ restaurant.restaurant_text }} yet.</p>
+        </div>
+    {% endif %}
+</div>
 
 {% endblock %}

@@ -1,0 +1,16 @@
+{% extends 'reviewapp/base.html' %}
+
+{% block content %}
+
+    <h1>{{category.category_text}}</h1>
+    <hr>
+    <ul>
+        {% for r in restaurants.all %}
+        <li>
+            {{r.restaurant_text}}
+            <a href="{% url 'reviewapp:details' r.id %}" class="btn btn-primary">View Reviews</a>
+        </li>
+        {% endfor %}
+    </ul>
+
+{% endblock %}

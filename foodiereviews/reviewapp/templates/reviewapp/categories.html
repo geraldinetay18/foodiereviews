@@ -7,5 +7,21 @@
     }
 </style>
 
-You are looking at the home page
+<div class="container">
+    {% for category in categories %}
+    <div class="row">
+        <div class="col card border-0 shadow mb-4">
+            <div class="card-body">
+                <img class="card-img-top" src="/static/reviewapp/images/cat{{category.id}}.jpg" alt="{{category.category_text}}" >
+                <div class="card-body">
+                    <h3 class="card-title">{{ category.category_text }}</h3>
+                    <hr>
+                    <a href="{% url 'reviewapp:restaurants' category.id %}" class="btn btn-primary">View Restaurants</a>
+                </div>
+            </div>
+        </div>
+    </div>
+    {% endfor %}
+</div>
+
 {% endblock %}
