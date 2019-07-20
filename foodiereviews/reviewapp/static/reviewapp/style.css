@@ -66,3 +66,11 @@ body {
     border-radius: 50%;
     background: #f8204f;
 }
+
+.content-container{
+    padding: 50px 0px;
+}
+
+li {
+    list-style: none;
+}

@@ -33,8 +33,18 @@ def restaurants(request, category_id):
 
 
 def details(request, restaurant_id):
-    restaurant = get_object_or_404(Restaurant, pk=restaurant_id)
-    return render(request, 'reviewapp/details.html', {'restaurant': restaurant, 'user': request.user})
+    restaurant = Restaurant.objects.filter(pk=restaurant_id).first()
+    user_liked_reviews = get_liked_reviews_by_user_and_restaurant(request.user, restaurant)
+    return render(request, 'reviewapp/details.html', {'restaurant': restaurant, 'user': request.user, 'user_liked_reviews': user_liked_reviews })
+
+
+def get_liked_reviews_by_user_and_restaurant(user, restaurant):
+    liked_reviews = []
+    for review in restaurant.review_set.all():
+        like = review.like_set.filter(user=user).first()
+        if like:
+            liked_reviews.append(review.id)
+    return liked_reviews
 
 
 @login_required
@@ -74,11 +84,16 @@ def reply(request, comment_id):
 def like(request, review_id):
     review = get_object_or_404(Review, pk=review_id)
     if review:
-        review.review_likes = review.review_likes + 1
-        review.save()
+        # check if user has liked before
+        like = review.like_set.filter(user=request.user).first()
+        if like:
+            print("User has already liked the review. A new like will not be created again.")
+        else:
+            review.like_set.create(user=request.user)
     else:
-        print("Invalid fields for comment. Required: review id, username and comment description.")
-    return render(request, 'reviewapp/details.html', {'restaurant': review.restaurant, 'user': request.user})
+        print("Invalid fields for like. Required: review id and username.")
+    user_liked_reviews = get_liked_reviews_by_user_and_restaurant(request.user, review.restaurant)
+    return render(request, 'reviewapp/details.html', {'restaurant': review.restaurant, 'user': request.user, 'user_liked_reviews': user_liked_reviews })
 
 
 @login_required
@@ -88,7 +103,7 @@ def reviewed(request, restaurant_id):
         rtg = request.POST.get("rate", 1)
         p = request.POST.get("price", 1)
         res = get_object_or_404(Restaurant, pk=restaurant_id)
-        res.review_set.create(review_user=request.user, **form.cleaned_data, review_rate=rtg, review_price=p, review_likes=0)
+        res.review_set.create(review_user=request.user, **form.cleaned_data, review_rate=rtg, review_price=p)
     else:
         print(form.errors)
 
