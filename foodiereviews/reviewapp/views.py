@@ -32,7 +32,6 @@ def restaurants(request, category_id):
     return render(request, 'reviewapp/restaurants.html', context)
 
 
-@login_required
 def details(request, restaurant_id):
     restaurant = get_object_or_404(Restaurant, pk=restaurant_id)
     return render(request, 'reviewapp/details.html', {'restaurant': restaurant, 'user': request.user})
