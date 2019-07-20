@@ -28,10 +28,8 @@ urlpatterns = [
 
     # ex: /reviewapp/resto/5/reviewed
     path('resto/<int:restaurant_id>/reviewed', views.reviewed, name='reviewed'),
-
-    # ex: /reviewapp/test
-    path('test', views.test, name='test'),
-
     
+    # ex: /reviewapp/like/6
+    path('like/<int:review_id>/', views.like, name='like'),
 
 ]

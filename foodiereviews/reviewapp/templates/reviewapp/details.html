@@ -31,17 +31,20 @@ li {
                     <strong>{{review.review_user}}</strong>
                     {{review.review_description}} 
                     <div>
-                        <a href="#">Like</a>
-                        <span style="padding-left: 10px">
-                            <span class="badge badge-danger">{{review.review_likes}} likes</span>
-                        </span>
+                        <form action="{% url 'reviewapp:like' review.id %}" method="post">
+                            {% csrf_token %}
+                            <input type="submit" value="Like" class="btn btn-outline-danger btn-sm">
+                            <span style="padding-left: 10px">
+                                <span class="badge badge-danger">{{review.review_likes}} likes</span>
+                            </span>
+                        </form>
                     </div>
                 </div>
                 <hr>
                 <div>
                     <ul>
                         <li>
-                            <form name="comment" action="{% url 'reviewapp:comment' review.id %}" method="post">
+                            <form action="{% url 'reviewapp:comment' review.id %}" method="post">
                                 {% csrf_token %}
                                 <div class="input-group mb-3">
                                     <input type="text" class="form-control" name="comment_description" placeholder="Write your comment about the review..."> 
@@ -63,7 +66,7 @@ li {
                                         </li>
                                     {% endfor %}
 
-                                    <form name="reply" action="{% url 'reviewapp:reply' comment.id %}" method="post">
+                                    <form action="{% url 'reviewapp:reply' comment.id %}" method="post">
                                         {% csrf_token %}
                                         <div class="input-group mb-3">
                                             <input type="text" class="form-control" name="reply_description" placeholder="Write your reply to the comment..."> 
