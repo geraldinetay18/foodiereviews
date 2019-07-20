@@ -2,7 +2,12 @@
 
 {% block content %}
 
-    <h1>{{category.category_text}}</h1>
+    {% if category %}
+        <h1>{{category.category_text}}</h1>
+    {% else %}
+        <h1>Search Results</h1>
+        <p>Searched for {{ search_detail }}</p>
+    {% endif %}
     <hr>
     <ul>
         {% for r in restaurants.all %}
