@@ -27,6 +27,11 @@
     font-size: 15px;
 }
 
+.review-liner-small{
+    margin: 0px 10px 0px 0px;
+    font-size: 15px;
+}
+
 #restaurant-summary{
     padding: 10px;
     background: rgba(255,255,255, 0.8); 
@@ -42,9 +47,56 @@ h1 {
 .user-icon{
     font-size: 2em;
 }
+.user-icon-small{
+    font-size: 1.5em;
+    text-align: right;
+    padding-right: 10px;
+}
 .date{
     font-style: italic;
     color:grey;
+}
+hr {
+    display: block; height: 1px;
+    border: 0; border-top: 3px solid #ddd;
+    margin: 1em 0; padding: 0; 
+}
+.user-bar{
+    display: table;
+}
+.user-icon-side{
+    display: table-cell;
+    vertical-align: middle;
+    padding-left: 10px;
+}
+.review-meta-data{
+    font-size: 0.7em;
+}
+.review-icon{
+    font-size: 1.2em;
+}
+.comment-reply-content{
+    background-color: #F2F3F5;
+    border-radius: 25px;
+    padding: 8px 15px 8px 15px;
+    display: inline-block;
+    margin-bottom: 0;
+}
+.comment-options{
+    padding: 3px 15px 0px 15px;
+    display: block;
+}
+.new-comment-reply{
+    border-radius: 30px;
+}
+.replies{
+    margin-left:60px;
+}
+.col-11{
+    padding-left:5px;
+}
+.row-comment-reply{
+    margin: 10px 0px;
 }
 </style>
 <div id="outer"
@@ -97,78 +149,91 @@ style="width:100%; background:url('/static/reviewapp/images/{{ restaurant.pk }}.
                 <div class="row">
                     <div class="col card" style="margin: 10px">
                         <div class="card-body">
-                            <span class="user-icon"><i class="fas fa-user-circle"></i></span>
-                            <strong>{{review.review_user}}</strong>
-                            <br>
-                            <label>
+                            <div class="user-bar">
+                                <span class="user-icon"><i class="fas fa-user-circle"></i></span>
+                                <div class="user-icon-side review-meta-data">
+                                    <span><strong>{{review.review_user}}</strong></span><br>
+                                    <span class="date">Reviewed on {{ review.review_date }}</span>
+                                </div>
+                            </div>
+                            
+
+                            <label class="review-liner-small review-icon">
                                 {% for i in review.review_rate|rjust:review.review_rate %}
                                 <i class="fas fa-star rate-small"/></i>
                                 {% endfor %}
                             </label>
-                            <label>
+                            <label id="price" class="review-liner-small review-icon">
                                 {% for i in review.review_price|rjust:review.review_price %}
                                 <i class="fas fa-dollar-sign price-small"/></i>
                                 {% endfor %}
                             </label>
-                            <span class="date">{{ review.review_date }}</span>
-                            <h4>{{ review.review_title }}</h4>
+                            
+                            <h3>{{ review.review_title }}</h3>
                             {{review.review_description}}
                             
-                            <br>
+                            
                             <p>
                                 <!--Likes-->
                                 {% if review.id in user_liked_reviews %}
-                                    <span class="badge badge-primary">Liked! <i class="fas fa-thumbs-up"></i></span>
+                                    <span class="badge badge-primary">Liked! </span>
+                                    <span style="padding-left: 10px">
+                                        <span class="badge badge-danger">{{review.like_set.count}}  <i class="fas fa-thumbs-up"></i></span>
+                                    </span>
                                 {% else %}
                                 <form action="{% url 'reviewapp:like' review.id %}" method="post">
                                     {% csrf_token %}
-                                    <input type="submit" value="Like" class="btn btn-outline-danger btn-sm"></input>
+                                    <input type="submit" value="Like" class="btn btn-outline-primary btn-sm" style="height:20px;line-height: 0px;"></input>
+                                    <span style="padding-left: 10px">
+                                        <span class="badge badge-danger">{{review.like_set.count}}  <i class="fas fa-thumbs-up"></i></span>
+                                    </span>
                                 </form>
                                 {% endif %}
-                                <span style="padding-left: 10px">
-                                    <span class="badge badge-danger">{{review.like_set.count}}  <i class="fas fa-thumbs-up"></i></span>
-                                </span>
                             </p>
                             <hr>
+
                             <!--Comments-->
                             <div>
-                                <ul>
-                                    <li>
-                                        <form action="{% url 'reviewapp:comment' review.id %}" method="post">
-                                            {% csrf_token %}
-                                            <div class="input-group mb-3">
-                                                <input type="text" class="form-control" name="comment_description" placeholder="Write your comment about the review..."> 
-                                                <div class="input-group-append">
-                                                    <input type="submit" value="Comment" class="btn btn-success">
+
+                                <!-- Add Comment-->
+                                <div class="row row-comment-reply">
+                                    <span class="user-icon-small col"><i class="fas fa-user-circle"></i></span>
+                                    <form action="{% url 'reviewapp:comment' review.id %}" method="post" class="col-11">
+                                        {% csrf_token %}
+                                        <input type="text" class="form-control new-comment-reply" name="comment_description" placeholder="Write your comment for this review..."> 
+                                    </form>
+                                </div>
+
+                                <!--Current Comments-->
+                                {% for comment in review.comment_set.all|dictsortreversed:"pk" %}
+                                    <div class="row row-comment-reply">
+                                        <span class="user-icon-small col"><i class="fas fa-user-circle"></i></span>
+                                        <div class="col-11">
+                                            <div class="comment-reply-content">
+                                                <span style="padding-right:10px;"><strong>{{comment.comment_user}}</strong></span>
+                                                {{comment.comment_description}}
+                                            </div>
+                                            <div class="comment-options">
+                                                <a href="#" onclick="createAddReply({{ comment.id }}, this); return false;">Reply</a>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <!--Current Replies-->
+                                    <div id="{{ comment.id }}" class="replies">
+                                        {% for reply in comment.reply_set.all|dictsortreversed:"pk" %}
+                                            <div class="row row-comment-reply">
+                                                <span class="user-icon-small col"><i class="fas fa-user-circle"></i></span>
+                                                <div class="col-11">
+                                                    <div class="comment-reply-content">
+                                                        <span style="padding-right:10px;"><strong>{{reply.reply_user}}</strong></span>
+                                                        {{reply.reply_description}}
+                                                    </div>  
                                                 </div>
                                             </div>
-                                        </form>
-                                    </li>
-                                    {% for comment in review.comment_set.all|dictsortreversed:"pk" %}
-                                        <li>
-                                            <strong>{{comment.comment_user}}</strong>
-                                            {{comment.comment_description}}
-                                            <ul>
-                                                {% for reply in comment.reply_set.all|dictsortreversed:"pk" %}
-                                                    <li>
-                                                        <strong>{{reply.reply_user}}</strong>
-                                                        {{reply.reply_description}}
-                                                    </li>
-                                                {% endfor %}
-        
-                                                <form action="{% url 'reviewapp:reply' comment.id %}" method="post">
-                                                    {% csrf_token %}
-                                                    <div class="input-group mb-3">
-                                                        <input type="text" class="form-control" name="reply_description" placeholder="Write your reply to the comment..."> 
-                                                        <div class="input-group-append">
-                                                            <input type="submit" value="Reply" class="btn btn-outline-secondary">
-                                                        </div>
-                                                    </div>
-                                                </form>
-                                            </ul>
-                                        </li>
-                                    {% endfor %}
-                                </ul>
+                                        {% endfor %}
+                                    </div>
+                                {% endfor %}
                             </div>
                         </div>
                     </div>
@@ -183,4 +248,25 @@ style="width:100%; background:url('/static/reviewapp/images/{{ restaurant.pk }}.
     </div>
 </div>
 
+<!-- Add Reply-->
+<div id="newReply" class="row row-comment-reply" style="display:none;">
+    <span class="user-icon-small col"><i class="fas fa-user-circle"></i></span>
+    <form action="{% url 'reviewapp:reply' 1 %}" method="post" class="col-11">
+        {% csrf_token %}
+        <input type="text" class="form-control new-comment-reply" name="reply_description" placeholder="Write your reply to this comment..."> 
+    </form>
+</div>
+
+<script>
+
+function createAddReply(commentId, replyButton){
+    var newReply = $("#newReply").clone();
+    newReply.children("form")[0].action = "/reviewapp/reply/" + commentId + "/";
+    console.log(newReply[0]);
+    newReply[0].style="";
+    var id = "#" + commentId
+    $(id).prepend(newReply);
+    replyButton.style.display="none";
+}
+</script>
 {% endblock %}

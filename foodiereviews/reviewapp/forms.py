@@ -11,11 +11,3 @@ class ReviewForm(ModelForm):
         widgets = {
             'review_description': Textarea(attrs={'cols': 80, 'rows': 8}),
         }
-
-# class ReviewForm(forms.ModelForm):
-#     review_title = forms.CharField
-#     review_description = forms.CharField (widget=forms.Textarea)
-
-#     class Meta:
-#         model = Review
-        
