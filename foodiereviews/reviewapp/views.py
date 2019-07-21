@@ -5,6 +5,8 @@ from django.urls import reverse
 from django.views import generic
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth import authenticate, login, logout
+from rest_framework.views import APIView
+from rest_framework.response import Response
 
 
 def categories(request):
@@ -34,7 +36,9 @@ def restaurants(request, category_id):
 
 def details(request, restaurant_id):
     restaurant = Restaurant.objects.filter(pk=restaurant_id).first()
-    user_liked_reviews = get_liked_reviews_by_user_and_restaurant(request.user, restaurant)
+    user_liked_reviews = []
+    if not request.user.is_anonymous:
+        user_liked_reviews = get_liked_reviews_by_user_and_restaurant(request.user, restaurant)
     return render(request, 'reviewapp/details.html', {'restaurant': restaurant, 'user': request.user, 'user_liked_reviews': user_liked_reviews })
 
 
@@ -108,3 +112,38 @@ def reviewed(request, restaurant_id):
         print(form.errors)
 
     return render(request, 'reviewapp/details.html', {'restaurant': res, 'user': request.user})
+
+
+def comment_add(request, review_id):
+    review = get_object_or_404(Review, pk=review_id)
+    if review:
+        review.comment_set.create(comment_user=request.user, comment_description=request.POST.get('comment_description'))
+    else:
+        print("Invalid fields for comment. Required: review id, username and comment description.")
+
+    return render(request, 'reviewapp/details.html', {'restaurant': review.restaurant, 'user': request.user})
+
+
+class CommentAdd(APIView):
+    authentication_classes = []
+    permission_classes = []
+
+    def post(self, request, format=None):
+        success = False
+        review_id = request.POST.get('review_id', None)
+        comment_user_id = request.POST.get('comment_user_id', None)
+        comment_description = request.POST.get('comment_description', None)
+        
+        if review_id and comment_user_id and comment_description:
+            review = get_object_or_404(Review, pk=review_id)
+            comment_user = get_object_or_404(User, pk=comment_user_id)
+            try:
+                new_review = review.comment_set.create(comment_user=comment_user, comment_description=comment_description)
+                success = True
+            except Exception as e:
+                print(e, "Invalid fields for comment. Required: review id, username and comment description.")
+            data = {
+                'success': success,
+                'new_review_pk': new_review.pk
+            }
+        return Response(data)

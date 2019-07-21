@@ -32,4 +32,7 @@ urlpatterns = [
     # ex: /reviewapp/resto/5/reviewed
     path('resto/<int:restaurant_id>/reviewed', views.reviewed, name='reviewed'),
 
+    # ex: /reviewapp/api/comment/add
+    path('api/comment/add/', views.CommentAdd.as_view()),
+    
 ]

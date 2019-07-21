@@ -91,12 +91,17 @@ hr {
 }
 .replies{
     margin-left:60px;
+    margin-bottom:15px;
 }
 .col-11{
     padding-left:5px;
 }
 .row-comment-reply{
     margin: 10px 0px;
+}
+.comment-username{
+    padding-right:10px;
+    font-weight: bold;
 }
 </style>
 <div id="outer"
@@ -192,48 +197,53 @@ style="width:100%; background:url('/static/reviewapp/images/{{ restaurant.pk }}.
                             </p>
                             <hr>
 
-                            <!--Comments-->
+                            <!-- COMMENTS -->
                             <div>
-
-                                <!-- Add Comment-->
+                                
+                                <!-- ADD COMMENT -->
                                 <div class="row row-comment-reply">
                                     <span class="user-icon-small col"><i class="fas fa-user-circle"></i></span>
-                                    <form action="{% url 'reviewapp:comment' review.id %}" method="post" class="col-11">
+                                    <form action="#" method="post" class="col-11 comment_form" onsubmit="addComment(this); return false;">
                                         {% csrf_token %}
                                         <input type="text" class="form-control new-comment-reply" name="comment_description" placeholder="Write your comment for this review..."> 
+                                        <input type="hidden" name="review_id" value="{{ review.id }}" />
                                     </form>
                                 </div>
 
-                                <!--Current Comments-->
-                                {% for comment in review.comment_set.all|dictsortreversed:"pk" %}
-                                    <div class="row row-comment-reply">
-                                        <span class="user-icon-small col"><i class="fas fa-user-circle"></i></span>
-                                        <div class="col-11">
-                                            <div class="comment-reply-content">
-                                                <span style="padding-right:10px;"><strong>{{comment.comment_user}}</strong></span>
-                                                {{comment.comment_description}}
-                                            </div>
-                                            <div class="comment-options">
-                                                <a href="#" onclick="createAddReply({{ comment.id }}, this); return false;">Reply</a>
-                                            </div>
-                                        </div>
-                                    </div>
-
-                                    <!--Current Replies-->
-                                    <div id="{{ comment.id }}" class="replies">
-                                        {% for reply in comment.reply_set.all|dictsortreversed:"pk" %}
+                                <!-- CURRENT COMMENTS -->
+                                <div id="rc{{ review.id }}">
+                                    {% for comment in review.comment_set.all|dictsortreversed:"pk" %}
+                                        <div>
                                             <div class="row row-comment-reply">
                                                 <span class="user-icon-small col"><i class="fas fa-user-circle"></i></span>
                                                 <div class="col-11">
                                                     <div class="comment-reply-content">
-                                                        <span style="padding-right:10px;"><strong>{{reply.reply_user}}</strong></span>
-                                                        {{reply.reply_description}}
-                                                    </div>  
+                                                        <span class="comment-username">{{comment.comment_user}}</span>
+                                                        <span class="comment-description">{{comment.comment_description}}</span>
+                                                    </div>
+                                                    <div class="comment-options">
+                                                        <a href="#" onclick="createAddReply({{ comment.id }}, this); return false;">Reply</a>
+                                                    </div>
                                                 </div>
                                             </div>
-                                        {% endfor %}
-                                    </div>
-                                {% endfor %}
+
+                                            <!--Current Replies-->
+                                            <div id="c{{ comment.id }}" class="replies">
+                                                {% for reply in comment.reply_set.all|dictsortreversed:"pk" %}
+                                                    <div class="row row-comment-reply">
+                                                        <span class="user-icon-small col"><i class="fas fa-user-circle"></i></span>
+                                                        <div class="col-11">
+                                                            <div class="comment-reply-content">
+                                                                <span style="padding-right:10px;"><strong>{{reply.reply_user}}</strong></span>
+                                                                {{reply.reply_description}}
+                                                            </div>  
+                                                        </div>
+                                                    </div>
+                                                {% endfor %}
+                                            </div>
+                                        </div>
+                                    {% endfor %}
+                                </div>
                             </div>
                         </div>
                     </div>
@@ -248,25 +258,101 @@ style="width:100%; background:url('/static/reviewapp/images/{{ restaurant.pk }}.
     </div>
 </div>
 
-<!-- Add Reply-->
+<!-- SAMPLE Add Reply-->
 <div id="newReply" class="row row-comment-reply" style="display:none;">
     <span class="user-icon-small col"><i class="fas fa-user-circle"></i></span>
-    <form action="{% url 'reviewapp:reply' 1 %}" method="post" class="col-11">
+    <form action="" method="post" class="col-11">
         {% csrf_token %}
         <input type="text" class="form-control new-comment-reply" name="reply_description" placeholder="Write your reply to this comment..."> 
     </form>
 </div>
 
+<!-- SAMPLE Comment-->
+<div id="newComment" style="display:none;">
+    <div class="row row-comment-reply">
+        <span class="user-icon-small col"><i class="fas fa-user-circle"></i></span>
+        <div class="col-11">
+            <div class="comment-reply-content">
+                <span class="comment-username"></span>
+                <span class="comment-description"></span>
+            </div>
+            <div class="comment-options">
+                <a href="#">Reply</a>
+            </div>
+        </div>
+    </div>
+
+    <!--Replies container-->
+    <div id="" class="replies">
+    </div>
+</div>
+
 <script>
+function addComment(form){
+    var endpoint = "/reviewapp/api/comment/add/";
+
+    var review_id = form.children[name="review_id"].value;
+    var comment_description_input = form.children[name="comment_description"];
+    var comment_description = comment_description_input.value;
+    var comment_user_id = "{{ user.id }}";
+    // console.log(">>>>> user " + comment_user + " review " + review_id + " des " + comment_description);
+    isComplete = validateComplete([review_id, comment_user_id, comment_description]);
+    // console.log(isComplete);
+
+    if (!isComplete){
+        return false;
+    }
+
+    $.ajax({
+        method: "POST",
+        url: endpoint,
+        data: {
+            review_id: review_id,
+            comment_user_id: comment_user_id,
+            comment_description: comment_description
+        },
+        success: function(data) {
+            if (data.success){
+                displayNewComment(review_id, "{{ user.username }}", comment_description, data.new_review_pk, comment_description_input);
+                console.log(data);
+            }
+        }
+    });
+}
 
 function createAddReply(commentId, replyButton){
-    var newReply = $("#newReply").clone();
+    var newReply = $("#newReply").clone().removeAttr("id");
     newReply.children("form")[0].action = "/reviewapp/reply/" + commentId + "/";
-    console.log(newReply[0]);
     newReply[0].style="";
-    var id = "#" + commentId
-    $(id).prepend(newReply);
+
+    var repliesDiv = "#c" + commentId;
+    $(repliesDiv).prepend(newReply);
     replyButton.style.display="none";
+}
+
+function validateComplete(fields){
+    console.log("validating");
+    return fields.every(function(field){
+        console.log(field);
+        return field !== "";
+    });
+}
+
+function displayNewComment(review_id, comment_username, comment_description, comment_id, comment_description_input){
+    console.log("displaying");
+    var onclick_script = "createAddReply("+ comment_id +", this); return false;"
+    
+    var newComment = $("#newComment").clone().removeAttr("id");
+    newComment.find("span.comment-username").text(comment_username);
+    newComment.find("span.comment-description").text(comment_description);
+    newComment.find("a").attr("onclick", onclick_script);
+    newComment.find(".replies").attr("id", "c" + comment_id);
+    newComment.show();
+
+    var commentsDiv = "#rc" + review_id;
+    $(commentsDiv).prepend(newComment[0]).hide().fadeIn('slow');
+    comment_description_input.value = "";
+    comment_description_input.blur();
 }
 </script>
 {% endblock %}
