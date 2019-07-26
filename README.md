@@ -1,19 +1,11 @@
 # Food Reviews App
 A Django Web App built with the National University of Singapore, Institute of Systems Science. 
 
-## GIFs
-![](foodiereviews/reviewapp/static/reviewapp/images/shot1.gif)
-
-![](foodiereviews/reviewapp/static/reviewapp/images/shot2.gif)
-
-![](foodiereviews/reviewapp/static/reviewapp/images/shot3.gif)
-
-![](foodiereviews/reviewapp/static/reviewapp/images/shot4.gif)
-
-![](foodiereviews/reviewapp/static/reviewapp/images/shot5.gif)
+## GIF Walkthrough
+![](foodiereviews/reviewapp/static/reviewapp/images/overall.gif)
 
 ## Screenshots
-![](foodiereviews/reviewapp/static/reviewapp/images/screenshot1.jpg)
+![](foodiereviews/reviewapp/static/reviewapp/images/screenshot1A.jpg)
 
 ![](foodiereviews/reviewapp/static/reviewapp/images/screenshot2.jpg)
 
