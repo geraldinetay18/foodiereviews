@@ -1,25 +1,50 @@
 # Food Reviews App
 A Django Web App built with the National University of Singapore, Institute of Systems Science. 
 
+## GIFs
+![](foodiereviews/reviewapp/static/reviewapp/images/shot1.gif)
+
+![](foodiereviews/reviewapp/static/reviewapp/images/shot2.gif)
+
+![](foodiereviews/reviewapp/static/reviewapp/images/shot3.gif)
+
+![](foodiereviews/reviewapp/static/reviewapp/images/shot4.gif)
+
+![](foodiereviews/reviewapp/static/reviewapp/images/shot5.gif)
+
 ## Screenshots
-![](foodiereviews/reviewapp/static/reviewapp/images/screenshot1.PNG)
+![](foodiereviews/reviewapp/static/reviewapp/images/screenshot1.jpg)
 
-![](foodiereviews/reviewapp/static/reviewapp/images/screenshot2.PNG)
+![](foodiereviews/reviewapp/static/reviewapp/images/screenshot2.jpg)
 
-![](foodiereviews/reviewapp/static/reviewapp/images/screenshot3.PNG)
+![](foodiereviews/reviewapp/static/reviewapp/images/screenshot3.jpg)
+
+![](foodiereviews/reviewapp/static/reviewapp/images/screenshot4.jpg)
+
+![](foodiereviews/reviewapp/static/reviewapp/images/screenshot5.jpg)
 
 ## Contributions
-- **Saphira:** Restaurant Details
-- **Natalie:** Browsing by Categories, Browsing within Category
-- **Geraldine:** Add Review module, Authentication, Master page
+- Geraldine
+- Saphira
+- Natalie
 
 ## Features
 - Browse restaurant by categories
-- Browse list of restaurants within the selected category
 - For each restaurant, view details, reviews and comments to the reviews 
 - Login as member for the following 2 additional features
 - Add reviews to a resturant (star rating, price rating, review title and description)
 - Add comments to a review (like button, replies are indented)
+
+## Technical Accomplishments
+* Extensive use of AJAX with Django REST framework
+    * List of restaurants by category
+    * Like
+    * Add comment
+    * Add reply
+* Upon successful AJAX response, append new comment/ reply to DOM
+    * Efficient HTML DOM structure
+* Modularization of code for reusability
+* Clean project directory (Separation of concerns)
 
 ## Running the project
 - Install python, django (and Anaconda prompt if running on Windows)
