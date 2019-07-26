@@ -6,33 +6,27 @@ app_name = 'reviewapp'
 urlpatterns = [
 
     # ex: /reviewapp/
-    path('', views.categories, name='categories'),
-
-    # ex: /reviewapp/search/
-    path('search/', views.search, name='search'),
-    
-    # ex: /reviewapp/2
-    path('<int:category_id>/', views.restaurants, name='restaurants'),
+    path('', views.home, name='home'),
 
     # ex: /reviewapp/resto/5
     path('resto/<int:restaurant_id>/', views.details, name='details'),
 
     # ex: /reviewapp/resto/5/add
-    path('resto/<int:restaurant_id>/add', views.add, name='add'),
-
-    # ex: /reviewapp/comment/6
-    path('comment/<int:review_id>/', views.comment, name='comment'),
-
-    # ex: /reviewapp/reply/6
-    path('reply/<int:comment_id>/', views.reply, name='reply'),
-
-    # ex: /reviewapp/like/6
-    path('like/<int:review_id>/', views.like, name='like'),
+    path('resto/<int:restaurant_id>/add/', views.add, name='add'),
 
     # ex: /reviewapp/resto/5/reviewed
-    path('resto/<int:restaurant_id>/reviewed', views.reviewed, name='reviewed'),
+    path('resto/<int:restaurant_id>/reviewed/', views.reviewed, name='reviewed'),
 
-    # ex: /reviewapp/api/comment/add
-    path('api/comment/add/', views.CommentAdd.as_view()),
+    # ex: /reviewapp/api/comment/add/
+    path('api/comment/add/', views.CommentAdd.as_view(), name="comment"),
+    
+    # ex: /reviewapp/api/reply/add/
+    path('api/reply/add/', views.ReplyAdd.as_view(), name="reply"),
+
+    # ex: /reviewapp/api/comment/add/
+    path('api/like/add/', views.LikeAdd.as_view(), name="like"),
+
+    # ex: /reviewapp/api/restaurants/list/
+    path('api/restaurants/list/', views.GetRestaurantsByCategory.as_view(), name="restaurants_by_category"),
     
 ]

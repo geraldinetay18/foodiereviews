@@ -9,7 +9,7 @@
 
     <!--CSS-->
     {% load static %}
-    <link rel="stylesheet" type="text/css" href="{% static 'reviewapp/style.css' %}">
+    <link rel="stylesheet" type="text/css" href="{% static 'reviewapp/style/style.css' %}">
     <!-- Bootstrap CSS -->
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css">
     <!--Font-->
@@ -21,9 +21,6 @@
 
 <body>
     <!-- JavaScript -->
-    <!-- <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js"
-        integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo"
-        crossorigin="anonymous"></script> -->
     <script src="https://ajax.aspnetcdn.com/ajax/jQuery/jquery-3.4.1.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"
         integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1"
@@ -34,25 +31,13 @@
     {% load widget_tweaks %}
 
     <main>
-        <style>
-            body {
-                background-color: rgb(241, 241, 241)
-            }
-        </style>
-        <nav class="navbar navbar-expand-lg navbar-light" style="background-color:white;">
+        <nav class="navbar-foodie navbar navbar-expand-lg navbar-light">
             <a class="navbar-brand" href="/reviewapp/">
                 <img src="/static/reviewapp/images/frlogo3.png" height="40px" alt="foodie reviews">
             </a>
 
             <ul class="nav navbar-nav mr-auto">
-                <li class="nav-item"><a class="nav-link" href="{% url 'reviewapp:categories' %}">Home</a></li>
-                <li class="nav-item">
-                    <form action="{% url 'reviewapp:search' %}" method="get">
-                        <input class="form-control searchbar" type="text" placeholder="Search" aria-label="Search"
-                            name="q">
-                    </form>
-                </li>
-
+                <li class="nav-item"><a class="nav-link" href="{% url 'reviewapp:home' %}">Home</a></li>
             </ul>
 
             {% if user.is_authenticated %}
@@ -61,14 +46,26 @@
                     out</button>
             </a>
             {% else %}
-            <a href="/accounts/login"><button class="btn btn-info my-2 my-sm-0 login" style="font-weight: 500">Log
-                    in</button>
+            <a href="/accounts/login"><button class="btn btn-outline-info my-2 my-sm-0 login">Login</button>
             </a>
             {% endif %}
         </nav>
         {% block content %}
         {% endblock %}
     </main>
+
+    <style>
+    .navbar{
+        padding: 20px 100px;
+        font-size: 1.3em;
+        font-weight: bold;
+        color:#333;
+        background-color:white;
+    }
+    .nav-item{
+        padding: 3px 40px;
+    }
+    </style>
 </body>
 
 </html>

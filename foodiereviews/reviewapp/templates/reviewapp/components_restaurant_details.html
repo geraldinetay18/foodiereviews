@@ -1,0 +1,57 @@
+<!-- SAMPLE Comment-->
+<div id="newComment" style="display:none;">
+    <div class="row row-comment-reply">
+        <span class="user-icon-small col"><i class="fas fa-user-circle"></i></span>
+        <div class="col-11">
+            <div class="comment-reply-content">
+                <span class="comment-reply-username"></span>
+                <span class="comment-reply-description"></span>
+            </div>
+        </div>
+    </div>
+
+    <!-- OPTIONS -->
+    <div id="" class="replies-with-comment-options">
+        <div class="comment-options">
+            <a href="#" onclick="">Reply</a>
+        </div>
+    </div>
+
+    <!--Replies container-->
+    <div id="" class="replies">
+    </div>
+</div>
+    
+<!-- SAMPLE Like -->
+<div id="newLike" class="row" style="display:none;">
+    <div class="col-1">
+        <span class="badge badge-primary">Liked! </span>
+    </div>
+    <div class="col-1">
+        <span class="badge badge-danger">
+            <span class="likes-count" style="padding-right:10px;"></span>
+            <i class="fas fa-thumbs-up"></i>
+        </span>
+    </div>
+</div>
+
+<!-- SAMPLE Add Reply-->
+<div id="newAddReply" class="row row-comment-reply" style="display:none;">
+    <span class="user-icon-small col"><i class="fas fa-user-circle"></i></span>
+    <form action="#" method="post" class="col-11" onsubmit="addReply(this); return false;">
+        {% csrf_token %}
+        <input type="text" class="form-control new-comment-reply" name="reply_description" placeholder="Write your reply to this comment..."> 
+        <input type="hidden" name="comment_id" value="" />
+    </form>
+</div>
+
+<!-- SAMPLE Reply -->
+<div id="newReply" class="row row-comment-reply" style="display:none;">
+    <span class="user-icon-small col"><i class="fas fa-user-circle"></i></span>
+    <div class="col-11">
+        <div class="comment-reply-content">
+            <span class="comment-reply-username"></span>
+            <span class="comment-reply-description"></span>
+        </div>
+    </div>
+</div>

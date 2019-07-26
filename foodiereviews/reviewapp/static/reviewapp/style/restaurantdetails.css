@@ -1,0 +1,149 @@
+.price {
+    background-color: #4CAF50;
+    color: white;
+    border-radius: 50px;
+    padding: 6px 18px;
+    text-align: center;
+}
+
+.price-small{
+    color: #4CAF50;
+}
+
+.rate {
+    background-color: orange;
+    color:white;
+    border-radius: 50px;
+    padding: 6px 18px;
+    text-align: center;
+}
+
+.rate-small{
+    color:orange;
+}
+
+.review-liner{
+    margin: 15px 20px 0px 0px;
+    font-size: 18px;
+}
+
+.review-liner-small{
+    margin: 0px 10px 0px 0px;
+    font-size: 15px;
+}
+
+#restaurant-summary{
+    padding: 10px;
+    background: rgba(255,255,255, 0.9); 
+    text-align: center;
+}
+
+h1 {
+    font-family: Pacifico, sans-serif;
+}
+
+.card{
+    border-radius: 20px;
+}
+
+.user-icon{
+    font-size: 2em;
+}
+
+.user-icon-small{
+    font-size: 1.5em;
+    text-align: right;
+    padding-right: 10px;
+}
+
+.date{
+    font-style: italic;
+    color:grey;
+}
+
+hr {
+    display: block; height: 1px;
+    border: 0; border-top: 3px solid #ddd;
+    margin: 1em 0; padding: 0; 
+}
+
+.user-bar{
+    display: table;
+}
+
+.user-icon-side{
+    display: table-cell;
+    vertical-align: middle;
+    padding-left: 10px;
+}
+
+.review-meta-data{
+    font-size: 0.7em;
+}
+
+.review-icon{
+    font-size: 1.2em;
+}
+
+.comment-reply-content{
+    background-color: #F2F3F5;
+    border-radius: 25px;
+    padding: 8px 15px 8px 15px;
+    display: inline-block;
+    margin-bottom: 0;
+}
+
+.comment-options{
+    padding: 0px 15px 0px 50px;
+    display: block;
+}
+
+.new-comment-reply{
+    border-radius: 30px;
+}
+
+.replies{
+    margin-left:60px;
+    margin-bottom:15px;
+}
+
+.replies-with-comment-options{
+    margin-left:60px;
+    margin-bottom:15px;
+}
+
+.col-11{
+    padding-left:5px;
+}
+
+.row-comment-reply{
+    margin: 10px 0px 5px 0px;
+}
+
+.comment-reply-username{
+    padding-right:10px;
+    font-weight: bold;
+}
+
+#add-review{
+    background: rgba(255,0,93, 1); 
+    color: #ffffff;
+    border-radius: 50px;
+}
+
+#add-review:hover{
+    background-color:#4CAF50;
+}
+
+#no-reviews-yet-message{
+    margin-top:20px; 
+    text-align: center;
+    font-weight:bold; 
+    font-size: 1.2em; 
+    padding:30px;
+}
+
+.category{
+    font-size: 1em;
+    padding: 10px 25px;
+}

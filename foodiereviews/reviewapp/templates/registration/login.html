@@ -5,8 +5,9 @@
 
 <!--CSS-->
 {% load static %} 
-<link rel="stylesheet" type="text/css" href="{% static 'reviewapp/login.css' %}">
+<link rel="stylesheet" type="text/css" href="{% static 'reviewapp/style/login.css' %}">
 
+<div class="wrapper">
   <div class=box>
 
     <h2>Foodie Reviews</h2>
@@ -30,11 +31,11 @@
   </div>
 
   <div>
-      {% for error in form.non_field_errors %}
+    {% for error in form.non_field_errors %}
       <div class="alert alert-danger">
           <strong>{{ error|escape }}</strong>
       </div>
-  {% endfor %}
+    {% endfor %}
   </div>
-
+</div>
   {% endblock %}

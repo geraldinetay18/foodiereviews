@@ -4,15 +4,21 @@
 
 <!--CSS-->
 {% load static %}
-<link rel="stylesheet" type="text/css" href="{% static 'reviewapp/addreview.css' %}">
+<link rel="stylesheet" type="text/css" href="{% static 'reviewapp/style/addreview.css' %}">
 
 <div id="outer"
     style="width:100%; background:url('/static/reviewapp/images/{{ restaurant.pk }}.jpg') no-repeat fixed center; background-size: cover;">
     <div id="wrapper">
+
+        <!-- Back button-->
+        <a href="{% url 'reviewapp:details' restaurant.pk %}" class="back-button">
+            <i class="fas fa-arrow-circle-left"></i>
+        </a>
+
+        <!--Contents-->
         <div>
-            <h2>{{restaurant.restaurant_text}}</h2>
-            <h6><i class="fas fa-map-marker-alt" style="color:cornflowerblue;"></i> {{restaurant.restaurant_address}}
-            </h6>
+            <h1>{{restaurant.restaurant_text}}</h1>
+            <br>
         </div>
         <br>
 

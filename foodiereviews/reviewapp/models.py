@@ -33,7 +33,7 @@ class Restaurant(models.Model):
     
     def rating(self):
         if self.review_amount() is 0:
-            return None
+            return 0
         ratings = [r.review_rate for r in self.review_set.all()]
         avg_rate = round(statistics.mean(ratings))
         avg_rate = 1 if avg_rate is 0 else avg_rate
@@ -42,12 +42,11 @@ class Restaurant(models.Model):
     
     def pricing(self):
         if self.review_amount() is 0:
-            return None
+            return 0
         prices = [r.review_price for r in self.review_set.all()]
         avg_price = round(statistics.mean(prices))
         avg_price = 1 if avg_price is 0 else avg_price
         return avg_price
-
 
 
 class Review(models.Model):

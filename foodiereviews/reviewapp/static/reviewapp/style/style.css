@@ -1,0 +1,91 @@
+@import url('https://fonts.googleapis.com/css?family=Pacifico');
+
+body {
+    background-color: #F0F0F0;
+    min-height: 100%;
+}
+
+/* The radio */
+.radio {
+    display: block;
+    position: relative;
+    padding-left: 25px;
+    margin-bottom: 5px;
+    cursor: pointer;
+    font-size: 16px;
+    -webkit-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    user-select: none
+}
+
+/* Hide the browser's default radio button */
+.radio input {
+    position: absolute;
+    opacity: 0;
+    cursor: pointer;
+}
+
+/* Create a custom radio button */
+.checkround {
+    position: absolute;
+    top: 6px;
+    left: 0;
+    height: 16px;
+    width: 16px;
+    background-color: #fff;
+    border-color: #f8204f;
+    border-style: solid;
+    border-width: 2px;
+    border-radius: 50%;
+}
+
+
+/* When the radio button is checked, add a blue background */
+.radio input:checked~.checkround {
+    background-color: #fff;
+}
+
+/* Create the indicator (the dot/circle - hidden when not checked) */
+.checkround:after {
+    content: "";
+    position: absolute;
+    display: none;
+}
+
+/* Show the indicator (dot/circle) when checked */
+.radio input:checked~.checkround:after {
+    display: block;
+}
+
+/* Style the indicator (dot/circle) */
+.radio .checkround:after {
+    left: 1.2px;
+    top: 1.2px;
+    width: 9.6px;
+    height: 9.6px;
+    border-radius: 50%;
+    background: #f8204f;
+}
+
+.content-container{
+    padding: 50px 0px;
+}
+
+li {
+    list-style: none;
+}
+
+.back-button{
+    position: absolute;
+    top: 15px;
+    left: 30px;
+    font-size:2em;
+    color:rgb(255,0,93);
+}
+
+.login{
+    font-weight: 500;
+    font-size: 1em;
+    padding: 5px 20px;
+}   

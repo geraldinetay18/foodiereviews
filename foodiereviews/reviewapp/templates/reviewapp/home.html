@@ -1,0 +1,55 @@
+{% extends 'reviewapp/base.html' %}
+
+{% block content %}
+
+<div id="category-banner" class="text-center">
+    <div class="select-wrapper">
+        <select id="category-dropdown" onchange="getRestaurants(this.value);">
+            <option selected value="0">All Cuisines</option>
+            {% for c in categories %}
+            <option value="{{ c.id }}">{{ c.category_text }}</option>
+            {% endfor %}
+        </select>
+        <span><i class="fas fa-chevron-circle-down"></i></span>
+    </div>
+</div>
+
+<!--ERROR-->
+<div id="none-found">
+    <div class="alert alert-primary" role="alert">
+        No restaurants found.
+    </div>
+</div>
+
+<!--RESTAURANTS LIST-->
+<div id="restaurants-list-wrapper">
+    <div id="restaurants-list">
+    </div>
+</div>
+
+<!--SAMPLE RESTAURANT-->    
+<div id="newRestaurant" class="card restaurant-card shadow mb-4" style="display:none;">
+    <a href="#">
+        <div class="restaurant-image">
+            <img class="card-img-top" src="/static/reviewapp/images/1.jpg" width="100%">
+        </div>
+        <div class="card-body">
+            <h4 class="card-title"><span class="restaurant-text"></span></h4>
+            <span class="rating"></span>
+            <span class="pricing"></span>
+            (<span class="reviews"></span> reviews)
+        </div>
+    </a>
+</div>
+
+
+<!--CSS & JS-->
+{% load static %}
+<link rel="stylesheet" type="text/css" href="{% static 'reviewapp/style/home.css' %}" />
+{% load staticfiles %}
+<script src="{% static "reviewapp/js/home.js" %}"></script>
+
+<script>
+    getRestaurants(0);
+</script>
+{% endblock %}

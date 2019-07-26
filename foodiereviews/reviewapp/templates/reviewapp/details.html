@@ -1,127 +1,36 @@
 {% extends 'reviewapp/base.html' %}
 
 {% block content %}
-<style>
-.price {
-    background-color: #4CAF50;
-    color: white;
-    border-radius: 50px;
-    padding: 6px 18px;
-    text-align: center;
-}
-.price-small{
-    color: #4CAF50;
-}
-.rate {
-    background-color: orange;
-    color:white;
-    border-radius: 50px;
-    padding: 6px 18px;
-    text-align: center;
-}
-.rate-small{
-    color:orange;
-}
-.review-liner{
-    margin: 0px 20px 0px 0px;
-    font-size: 15px;
-}
 
-.review-liner-small{
-    margin: 0px 10px 0px 0px;
-    font-size: 15px;
-}
-
-#restaurant-summary{
-    padding: 10px;
-    background: rgba(255,255,255, 0.8); 
-}
-
-h1 {
-    text-align: center;
-    font-family: Pacifico, sans-serif;
-}
-.card{
-    border-radius: 20px;
-}
-.user-icon{
-    font-size: 2em;
-}
-.user-icon-small{
-    font-size: 1.5em;
-    text-align: right;
-    padding-right: 10px;
-}
-.date{
-    font-style: italic;
-    color:grey;
-}
-hr {
-    display: block; height: 1px;
-    border: 0; border-top: 3px solid #ddd;
-    margin: 1em 0; padding: 0; 
-}
-.user-bar{
-    display: table;
-}
-.user-icon-side{
-    display: table-cell;
-    vertical-align: middle;
-    padding-left: 10px;
-}
-.review-meta-data{
-    font-size: 0.7em;
-}
-.review-icon{
-    font-size: 1.2em;
-}
-.comment-reply-content{
-    background-color: #F2F3F5;
-    border-radius: 25px;
-    padding: 8px 15px 8px 15px;
-    display: inline-block;
-    margin-bottom: 0;
-}
-.comment-options{
-    padding: 3px 15px 0px 15px;
-    display: block;
-}
-.new-comment-reply{
-    border-radius: 30px;
-}
-.replies{
-    margin-left:60px;
-    margin-bottom:15px;
-}
-.col-11{
-    padding-left:5px;
-}
-.row-comment-reply{
-    margin: 10px 0px;
-}
-.comment-username{
-    padding-right:10px;
-    font-weight: bold;
-}
-</style>
 <div id="outer"
-style="width:100%; background:url('/static/reviewapp/images/{{ restaurant.pk }}.jpg') no-repeat fixed center; background-size: cover;">
+style="width:100%; min-height: 100vh; background:url('/static/reviewapp/images/{{ restaurant.pk }}.jpg') no-repeat fixed center; background-size: cover;">
 
     <div class="content-container container">
+        
         <!--RESTAURANT SUMMARY-->
         <div class="row">
             <div id="restaurant-summary" class="col card border-0 shadow mb-4">
                 <div class="card-body">
+                    
+                    <!-- Back button -->
+                    <a href="{% url 'reviewapp:home'%}" class="back-button">
+                        <i class="fas fa-arrow-circle-left"></i>
+                    </a>
+
+                    <!-- Title -->
                     <h1>{{restaurant.restaurant_text}}</h1>
 
                     <!-- Location -->
                     <label class="review-liner">
-                        <p><i class="fas fa-map-marker-alt" style="color:cornflowerblue;"></i> <strong>{{ restaurant.restaurant_address }}</strong></p>
+                        <span style="font-size: 1.5em;">
+                            <i class="fas fa-map-marker-alt" style="color:cornflowerblue;" ></i>
+                        </span>
+                        <strong>{{ restaurant.restaurant_address }}</strong>
                     </label>
 
                     <!-- Category -->
                     <label class="review-liner">
-                        <p><span class="badge badge-info"><strong>{{ restaurant.category.category_text }}</strong></span></p>
+                        <p><span class="badge badge-pill badge-primary category"><strong>{{ restaurant.category.category_text }}</strong></span></p>
                     </label>
                     
                     <!-- Average rating -->
@@ -141,14 +50,22 @@ style="width:100%; background:url('/static/reviewapp/images/{{ restaurant.pk }}.
                             {% endfor %}
                         </div>
                     </label>
+                    
+                    <!-- Reviews count -->
+                    <label class="review-liner">    
+                        <strong>({{ restaurant.review_set.count }} reviews)</strong>
+                    </label>
                 </div>
             </div>        
         </div>
         
         <!--ADD REVIEW-->
-        <a href="{% url 'reviewapp:add' restaurant.id %}" class="btn btn-danger btn-lg btn-block">Add a Review!</a>
+        <a href="{% url 'reviewapp:add' restaurant.id %}" id="add-review" class="btn btn-lg btn-block">
+            <strong>Add a Review!</strong>
+        </a>
 
         <!--ALL REVIEWS-->
+        
         {% if restaurant.review_set.all %}
             {% for review in restaurant.review_set.all|dictsortreversed:"pk" %}
                 <div class="row">
@@ -177,24 +94,26 @@ style="width:100%; background:url('/static/reviewapp/images/{{ restaurant.pk }}.
                             <h3>{{ review.review_title }}</h3>
                             {{review.review_description}}
                             
-                            
-                            <p>
-                                <!--Likes-->
-                                {% if review.id in user_liked_reviews %}
-                                    <span class="badge badge-primary">Liked! </span>
-                                    <span style="padding-left: 10px">
-                                        <span class="badge badge-danger">{{review.like_set.count}}  <i class="fas fa-thumbs-up"></i></span>
+                            <!--Likes-->
+                            <div id="rl{{ review.id }}" class="row">
+                                <div class="col-1">
+                                    {% if review.id in user_liked_reviews %}
+                                        <span class="badge badge-primary">Liked! </span>
+                                    {% else %}
+                                    <form action="#" method="post" onsubmit="addLike(this); return false;">
+                                        {% csrf_token %}
+                                        <input type="submit" value="Like" class="btn btn-outline-primary btn-sm" style="height:20px;line-height: 0px;"></input>
+                                        <input type="hidden" name="review_id" value="{{ review.id }}" />
+                                    </form>
+                                    {% endif %}
+                                </div>
+                                <div class="col-1">
+                                    <span class="badge badge-danger">
+                                        <span class="likes-count" style="padding-right:10px;">{{review.like_set.count}}</span>
+                                        <i class="fas fa-thumbs-up"></i>
                                     </span>
-                                {% else %}
-                                <form action="{% url 'reviewapp:like' review.id %}" method="post">
-                                    {% csrf_token %}
-                                    <input type="submit" value="Like" class="btn btn-outline-primary btn-sm" style="height:20px;line-height: 0px;"></input>
-                                    <span style="padding-left: 10px">
-                                        <span class="badge badge-danger">{{review.like_set.count}}  <i class="fas fa-thumbs-up"></i></span>
-                                    </span>
-                                </form>
-                                {% endif %}
-                            </p>
+                                </div>
+                            </div>
                             <hr>
 
                             <!-- COMMENTS -->
@@ -218,24 +137,28 @@ style="width:100%; background:url('/static/reviewapp/images/{{ restaurant.pk }}.
                                                 <span class="user-icon-small col"><i class="fas fa-user-circle"></i></span>
                                                 <div class="col-11">
                                                     <div class="comment-reply-content">
-                                                        <span class="comment-username">{{comment.comment_user}}</span>
-                                                        <span class="comment-description">{{comment.comment_description}}</span>
-                                                    </div>
-                                                    <div class="comment-options">
-                                                        <a href="#" onclick="createAddReply({{ comment.id }}, this); return false;">Reply</a>
+                                                        <span class="comment-reply-username">{{comment.comment_user}}</span>
+                                                        <span class="comment-reply-description">{{comment.comment_description}}</span>
                                                     </div>
                                                 </div>
                                             </div>
+                                            
+                                            <!-- OPTIONS -->
+                                            <div id="cc{{ comment.id }}" class="replies-with-comment-options">
+                                                <div class="comment-options">
+                                                    <a href="#" onclick="createAddReply({{ comment.id }}, this); return false;">Reply</a>
+                                                </div>
+                                            </div>
 
-                                            <!--Current Replies-->
+                                            <!-- CURRENT REPLIES -->
                                             <div id="c{{ comment.id }}" class="replies">
                                                 {% for reply in comment.reply_set.all|dictsortreversed:"pk" %}
                                                     <div class="row row-comment-reply">
                                                         <span class="user-icon-small col"><i class="fas fa-user-circle"></i></span>
                                                         <div class="col-11">
                                                             <div class="comment-reply-content">
-                                                                <span style="padding-right:10px;"><strong>{{reply.reply_user}}</strong></span>
-                                                                {{reply.reply_description}}
+                                                                <span class="comment-reply-username">{{reply.reply_user}}</span>
+                                                                <span class="comment-reply-description">{{reply.reply_description}}</span>
                                                             </div>  
                                                         </div>
                                                     </div>
@@ -251,108 +174,25 @@ style="width:100%; background:url('/static/reviewapp/images/{{ restaurant.pk }}.
             {% endfor %}
 
         {% else %}
-            <div class="alert alert-success" role="alert">
+            <div id="no-reviews-yet-message" class="alert alert-success" role="alert">
                 <p>There are no reviews for {{ restaurant.restaurant_text }} yet.</p>
+                <p>Would you like to start writing a review?</p>
             </div>
         {% endif %}
     </div>
 </div>
 
-<!-- SAMPLE Add Reply-->
-<div id="newReply" class="row row-comment-reply" style="display:none;">
-    <span class="user-icon-small col"><i class="fas fa-user-circle"></i></span>
-    <form action="" method="post" class="col-11">
-        {% csrf_token %}
-        <input type="text" class="form-control new-comment-reply" name="reply_description" placeholder="Write your reply to this comment..."> 
-    </form>
-</div>
+<!--SAMPLE COMMENT REPLY LIKE-->
+{% include 'reviewapp/components_restaurant_details.html' %}
 
-<!-- SAMPLE Comment-->
-<div id="newComment" style="display:none;">
-    <div class="row row-comment-reply">
-        <span class="user-icon-small col"><i class="fas fa-user-circle"></i></span>
-        <div class="col-11">
-            <div class="comment-reply-content">
-                <span class="comment-username"></span>
-                <span class="comment-description"></span>
-            </div>
-            <div class="comment-options">
-                <a href="#">Reply</a>
-            </div>
-        </div>
-    </div>
-
-    <!--Replies container-->
-    <div id="" class="replies">
-    </div>
-</div>
+<!--CSS & JS-->
+{% load static %}
+<link rel="stylesheet" type="text/css" href="{% static 'reviewapp/style/restaurantdetails.css' %}" />
+{% load staticfiles %}
+<script src="{% static "reviewapp/js/restaurant.comment.reply.like.js" %}"></script>
 
 <script>
-function addComment(form){
-    var endpoint = "/reviewapp/api/comment/add/";
-
-    var review_id = form.children[name="review_id"].value;
-    var comment_description_input = form.children[name="comment_description"];
-    var comment_description = comment_description_input.value;
-    var comment_user_id = "{{ user.id }}";
-    // console.log(">>>>> user " + comment_user + " review " + review_id + " des " + comment_description);
-    isComplete = validateComplete([review_id, comment_user_id, comment_description]);
-    // console.log(isComplete);
-
-    if (!isComplete){
-        return false;
-    }
-
-    $.ajax({
-        method: "POST",
-        url: endpoint,
-        data: {
-            review_id: review_id,
-            comment_user_id: comment_user_id,
-            comment_description: comment_description
-        },
-        success: function(data) {
-            if (data.success){
-                displayNewComment(review_id, "{{ user.username }}", comment_description, data.new_review_pk, comment_description_input);
-                console.log(data);
-            }
-        }
-    });
-}
-
-function createAddReply(commentId, replyButton){
-    var newReply = $("#newReply").clone().removeAttr("id");
-    newReply.children("form")[0].action = "/reviewapp/reply/" + commentId + "/";
-    newReply[0].style="";
-
-    var repliesDiv = "#c" + commentId;
-    $(repliesDiv).prepend(newReply);
-    replyButton.style.display="none";
-}
-
-function validateComplete(fields){
-    console.log("validating");
-    return fields.every(function(field){
-        console.log(field);
-        return field !== "";
-    });
-}
-
-function displayNewComment(review_id, comment_username, comment_description, comment_id, comment_description_input){
-    console.log("displaying");
-    var onclick_script = "createAddReply("+ comment_id +", this); return false;"
-    
-    var newComment = $("#newComment").clone().removeAttr("id");
-    newComment.find("span.comment-username").text(comment_username);
-    newComment.find("span.comment-description").text(comment_description);
-    newComment.find("a").attr("onclick", onclick_script);
-    newComment.find(".replies").attr("id", "c" + comment_id);
-    newComment.show();
-
-    var commentsDiv = "#rc" + review_id;
-    $(commentsDiv).prepend(newComment[0]).hide().fadeIn('slow');
-    comment_description_input.value = "";
-    comment_description_input.blur();
-}
+    var user_id = "{{ user.id }}";
+    var user_username = "{{ user.username }}";
 </script>
 {% endblock %}
