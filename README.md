@@ -7,7 +7,7 @@ A Django Web App built with the National University of Singapore, Institute of S
 ## Screenshots
 ![](foodiereviews/reviewapp/static/reviewapp/images/screenshot1A.jpg)
 
-![](foodiereviews/reviewapp/static/reviewapp/images/screenshot2.jpg)
+![](foodiereviews/reviewapp/static/reviewapp/images/screenshot2A.jpg)
 
 ![](foodiereviews/reviewapp/static/reviewapp/images/screenshot3.jpg)
 
