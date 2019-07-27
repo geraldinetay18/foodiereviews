@@ -25,12 +25,14 @@ A Django Web App built with the National University of Singapore, Institute of S
 - For each restaurant, view details, reviews and comments to the reviews 
 - Login as member for the following 2 additional features
 - Add reviews to a resturant (star rating, price rating, review title and description)
-- Add comments to a review (like button, replies are indented)
+- Like a review
+- Add comments to a review (replies are indented)
+- Add replies to comment (commens are indented)
 
 ## Technical Accomplishments
 * Extensive use of AJAX with Django REST framework
     * List of restaurants by category
-    * Like
+    * Like review
     * Add comment
     * Add reply
 * Upon successful AJAX response, append new comment/ reply to DOM
